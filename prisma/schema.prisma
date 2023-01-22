@@ -20,15 +20,15 @@ model Users {
 }
 
 model Profiles {
-  profile_id   Int      @id @default(autoincrement())
-  Users        Users    @relation(fields: [user_id], references: [user_id])
-  Medias       Medias   @relation(fields: [media_id], references: [media_id])
-  user_id      Int      @unique
-  media_id     Int      @unique
-  first_name   String   @db.VarChar(30)
-  last_name    String   @db.VarChar(30)
-  phone_number String   @db.Char(12)
-  bith_date    DateTime @db.Date
+  profile_id   Int       @id @default(autoincrement())
+  Users        Users     @relation(fields: [user_id], references: [user_id])
+  Medias       Medias?   @relation(fields: [media_id], references: [media_id])
+  user_id      Int       @unique
+  media_id     Int?      @unique
+  first_name   String?   @db.VarChar(30)
+  last_name    String?   @db.VarChar(30)
+  phone_number String?   @db.Char(12)
+  bith_date    DateTime? @db.Date
 }
 
 model Medias {

@@ -6,7 +6,14 @@ class Applications {
   public port: Number;
   constructor() {
     this.app = express();
+    this.middlewares();
+    this.routes();
     this.port = 3000;
+  }
+
+  private middlewares() {
+    this.app.use(express.json());
+    this.app.use(express.urlencoded());
   }
 
   private routes(): void {
