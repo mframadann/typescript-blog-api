@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  user_id       Int       @id @default(autoincrement())
+  Profiles      Profiles?
+  Posts         Posts[]
+  email         String?   @db.VarChar(50)
+  password      String
+  registered_at DateTime  @db.Date
+}
+
+model Profiles {
+  profile_id   Int      @id @default(autoincrement())
+  Users        Users    @relation(fields: [user_id], references: [user_id])
+  Medias       Medias   @relation(fields: [media_id], references: [media_id])
+  user_id      Int      @unique
+  media_id     Int      @unique
+  first_name   String   @db.VarChar(30)
+  last_name    String   @db.VarChar(30)
+  phone_number String   @db.Char(12)
+  bith_date    DateTime @db.Date
+}
+
+model Medias {
+  media_id       Int       @id @default(autoincrement())
+  Posts          Posts?
+  Profiles       Profiles?
+  media_name     String
+  media_path     String
+  media_mimetype String
+  media_url      String
+  media_size     Int
+}
+
+model Posts {
+  post_id           Int                 @id @default(autoincrement())
+  Users             Users               @relation(fields: [user_id], references: [user_id])
+  Medias            Medias              @relation(fields: [media_id], references: [media_id])
+  user_id           Int                 @unique
+  media_id          Int                 @unique
+  categories        CategoriesOnPosts[]
+  post_title        String              @db.VarChar(100)
+  post_slug         String              @db.VarChar(100)
+  post_excerpt      String              @db.Text
+  post_content      String              @db.Text
+  post_published    Boolean             @default(false)
+  post_created      DateTime            @db.Date
+  post_last_updated DateTime
+}
+
+model Categories {
+  category_id   Int                 @id @default(autoincrement())
+  category_name String              @db.VarChar(50)
+  category_slug String              @db.VarChar(50)
+  created_at    DateTime            @db.Date
+  posts         CategoriesOnPosts[]
+}
+
+model CategoriesOnPosts {
+  Posts       Posts      @relation(fields: [post_id], references: [post_id])
+  Categories  Categories @relation(fields: [category_id], references: [category_id])
+  post_id     Int
+  category_id Int
+
+  @@id([post_id, category_id])
+}
