@@ -45,7 +45,7 @@ model Medias {
 model Posts {
   post_id           Int                 @id @default(autoincrement())
   users             Users               @relation(fields: [user_id], references: [user_id])
-  Medias            Medias              @relation(fields: [media_id], references: [media_id])
+  media             Medias              @relation(fields: [media_id], references: [media_id])
   user_id           Int                 @unique
   media_id          Int                 @unique
   categories        CategoriesOnPosts[]
