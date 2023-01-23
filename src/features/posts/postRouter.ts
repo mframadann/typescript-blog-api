@@ -6,10 +6,14 @@ class PostRouter {
   constructor() {
     this.router = Router();
     this.getMethods();
+    this.postMethods();
   }
 
   private getMethods(): void {
     this.router.get("/", PostControllers.getAllPosts);
+  }
+  private postMethods(): void {
+    this.router.post("/create", PostControllers.createNewPosts);
   }
 }
 
