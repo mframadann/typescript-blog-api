@@ -12,8 +12,8 @@ datasource db {
 
 model Users {
   user_id       Int       @id @default(autoincrement())
-  Profiles      Profiles?
-  Posts         Posts[]
+  profile       Profiles?
+  posts         Posts[]
   email         String?   @db.VarChar(50)
   password      String
   registered_at DateTime  @db.Date
@@ -21,8 +21,8 @@ model Users {
 
 model Profiles {
   profile_id   Int       @id @default(autoincrement())
-  Users        Users     @relation(fields: [user_id], references: [user_id])
-  Medias       Medias?   @relation(fields: [media_id], references: [media_id])
+  users        Users     @relation(fields: [user_id], references: [user_id])
+  media        Medias?   @relation(fields: [media_id], references: [media_id])
   user_id      Int       @unique
   media_id     Int?      @unique
   first_name   String?   @db.VarChar(30)
@@ -33,8 +33,8 @@ model Profiles {
 
 model Medias {
   media_id       Int       @id @default(autoincrement())
-  Posts          Posts?
-  Profiles       Profiles?
+  posts          Posts?
+  profiles       Profiles?
   media_name     String
   media_path     String
   media_mimetype String
@@ -44,7 +44,7 @@ model Medias {
 
 model Posts {
   post_id           Int                 @id @default(autoincrement())
-  Users             Users               @relation(fields: [user_id], references: [user_id])
+  users             Users               @relation(fields: [user_id], references: [user_id])
   Medias            Medias              @relation(fields: [media_id], references: [media_id])
   user_id           Int                 @unique
   media_id          Int                 @unique
@@ -67,8 +67,8 @@ model Categories {
 }
 
 model CategoriesOnPosts {
-  Posts       Posts      @relation(fields: [post_id], references: [post_id])
-  Categories  Categories @relation(fields: [category_id], references: [category_id])
+  posts       Posts      @relation(fields: [post_id], references: [post_id])
+  categories  Categories @relation(fields: [category_id], references: [category_id])
   post_id     Int
   category_id Int
 

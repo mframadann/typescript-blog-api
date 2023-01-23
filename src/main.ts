@@ -1,5 +1,6 @@
 import express, { Application } from "express";
-import { Register } from "./features";
+import { Register, Users } from "./features";
+import logger from "morgan";
 
 class Applications {
   public app: Application;
@@ -14,10 +15,12 @@ class Applications {
   private middlewares() {
     this.app.use(express.json());
     this.app.use(express.urlencoded());
+    this.app.use(logger("dev"));
   }
 
   private routes(): void {
     this.app.use("/register", Register);
+    this.app.use("/users", Users);
   }
 }
 

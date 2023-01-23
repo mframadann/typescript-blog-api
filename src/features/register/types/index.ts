@@ -1,4 +1,6 @@
-export type BodyValues = {
-  email: string;
+export type RegisterPayloadType = {
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
   password: string;
 };
