@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build" : "rm -rf build/ && tsc",
     "watchdev": "rm -rf build/ && tsc -w",
     "dev": "nodemon ./dist/main.js"
   },
