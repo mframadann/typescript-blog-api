@@ -1,5 +1,5 @@
 import express, { Application } from "express";
-import { Register, Users } from "./features";
+import { Posts, Register, Users } from "./features";
 import logger from "morgan";
 
 class Applications {
@@ -21,6 +21,7 @@ class Applications {
   private routes(): void {
     this.app.use("/register", Register);
     this.app.use("/users", Users);
+    this.app.use("/posts", Posts);
   }
 }
 

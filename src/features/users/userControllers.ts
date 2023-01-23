@@ -41,6 +41,8 @@ class UsersControllers {
       user_id,
       profile = false,
       media = false,
+      post = false,
+      category = false,
     }: UsersQueryParams = req.query;
     if (!user_id) {
       return response({
@@ -63,6 +65,13 @@ class UsersControllers {
               },
             }
           : profile,
+        posts: post
+          ? {
+              include: {
+                categories: category,
+              },
+            }
+          : post,
       },
     });
     return response({
