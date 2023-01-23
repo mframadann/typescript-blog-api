@@ -19,6 +19,16 @@ class PostControllers {
           },
         },
         media: true,
+        categories: {
+          include: {
+            categories: {
+              select: {
+                category_name: true,
+                category_slug: true,
+              },
+            },
+          },
+        },
       },
     });
     return response({
@@ -30,6 +40,8 @@ class PostControllers {
   }
 
   public async createNewPosts(req: Request, res: Response): Promise<Response> {
+    const categories: any[] = [];
+    const currentDate: Date = new Date();
     const {
       postTitle,
       postContent,
@@ -38,9 +50,13 @@ class PostControllers {
       userId,
       mediaId,
     }: PostPayloads = req.body;
-    const currentDate: Date = new Date();
-    const postExcerpt: string = postContent.substring(0, 30);
+    const postExcerpt: string = postContent.slice(0, 50);
     const postSlug: string = postTitle.replace(/ /g, "-").toLowerCase();
+    [...categoryIds].map((categoryId): void => {
+      categories.push({
+        category_id: Number(categoryId),
+      });
+    });
     if (
       !postTitle ||
       !postSlug ||
@@ -61,28 +77,14 @@ class PostControllers {
           user_id: Number(userId),
           post_title: postTitle,
           post_slug: postSlug,
-          post_excerpt: postContent,
+          post_excerpt: postExcerpt,
           post_content: postContent,
           post_created: currentDate,
           post_last_updated: currentDate,
           post_published: Boolean(postPublished),
           media_id: mediaId ?? null,
-        },
-      });
-      await prisma.posts.update({
-        where: {
-          post_id: newPost.post_id,
-        },
-        data: {
           categories: {
-            set: [
-              {
-                post_id_category_id: {
-                  category_id: Number(categoryIds),
-                  post_id: newPost.post_id,
-                },
-              },
-            ],
+            create: categories,
           },
         },
       });
