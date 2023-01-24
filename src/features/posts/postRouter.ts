@@ -11,6 +11,7 @@ class PostRouter {
 
   private getMethods(): void {
     this.router.get("/", PostControllers.getAllPosts);
+    this.router.get("/find", PostControllers.getPostById);
   }
   private postMethods(): void {
     this.router.post("/create", PostControllers.createNewPosts);
