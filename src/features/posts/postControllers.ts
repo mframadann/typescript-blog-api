@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { response } from "../../helpers";
-import { PostPayloads } from "./types/index";
+import userControllers from "../users/userControllers";
+import { PostPayloads, PostQueryParams } from "./types/index";
 
 const prisma = new PrismaClient();
 class PostControllers {
@@ -18,7 +19,6 @@ class PostControllers {
             profile: true,
           },
         },
-        media: true,
         categories: {
           include: {
             categories: {
@@ -29,16 +29,73 @@ class PostControllers {
             },
           },
         },
+        media: true,
       },
+    });
+    const resultSets = allPosts.map((post): {} => {
+      return {
+        ...post,
+        user: {
+          ...post.user.profile,
+          email: post.user.email,
+        },
+        categories: post.categories.map((category) => category.categories),
+      };
     });
     return response({
       statusCode: 200,
       message: "Successfully get posts data",
-      data: allPosts,
+      data: resultSets,
       res,
     });
   }
-
+  public async getPostById(req: Request, res: Response): Promise<Response> {
+    const { post_id }: PostQueryParams = req.query;
+    const getPost = await prisma.posts.findUnique({
+      where: {
+        post_id: Number(post_id),
+      },
+      include: {
+        user: {
+          select: {
+            email: true,
+            profile: true,
+          },
+        },
+        categories: {
+          select: {
+            categories: {
+              select: {
+                category_id: true,
+                category_name: true,
+                category_slug: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!getPost) {
+      return response({
+        statusCode: 404,
+        message: `Cannot find post with id ${post_id}`,
+        res,
+      });
+    }
+    const postData = {
+      ...getPost,
+      user: {
+        email: getPost?.user.email,
+        ...getPost?.user.profile,
+      },
+      categories: getPost?.categories.map((category) => category.categories),
+    };
+    return response({
+      statusCode: 200,
+      data: postData,
+      res,
+    });
+  }
   public async createNewPosts(req: Request, res: Response): Promise<Response> {
     const categories: any[] = [];
     const currentDate: Date = new Date();
@@ -95,14 +152,21 @@ class PostControllers {
         res,
       });
     } catch (error: any) {
-      console.log(error.message);
-
       return response({
         statusCode: 500,
         message: error.message,
         res,
       });
     }
+  }
+
+  public async updatePost(req: Request, res: Response): Promise<Response> {
+    return response({
+      statusCode: 201,
+      message: "New post successfully created",
+      data: [],
+      res,
+    });
   }
 }
 

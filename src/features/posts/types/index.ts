@@ -9,7 +9,9 @@ export type PostPayloads = {
   postPublished: boolean;
 };
 
-// export type PostQueryParams = {
-//   author?: boolean;
-//   media?: boolean;
-// };
+export type PostQueryParams = {
+  user?: boolean;
+  media?: boolean;
+  categories?: boolean;
+  post_id?: number;
+};
