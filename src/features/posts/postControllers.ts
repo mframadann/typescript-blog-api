@@ -51,7 +51,7 @@ class PostControllers {
   }
   public async getPostById(req: Request, res: Response): Promise<Response> {
     const { post_id }: PostQueryParams = req.query;
-    const findPost = await prisma.posts.findUnique({
+    const getPost = await prisma.posts.findUnique({
       where: {
         post_id: Number(post_id),
       },
@@ -75,13 +75,20 @@ class PostControllers {
         },
       },
     });
+    if (!getPost) {
+      return response({
+        statusCode: 404,
+        message: `Cannot find post with id ${post_id}`,
+        res,
+      });
+    }
     const postData = {
-      ...findPost,
+      ...getPost,
       user: {
-        email: findPost?.user.email,
-        ...findPost?.user.profile,
+        email: getPost?.user.email,
+        ...getPost?.user.profile,
       },
-      categories: findPost?.categories.map((category) => category.categories),
+      categories: getPost?.categories.map((category) => category.categories),
     };
     return response({
       statusCode: 200,
@@ -89,7 +96,6 @@ class PostControllers {
       res,
     });
   }
-
   public async createNewPosts(req: Request, res: Response): Promise<Response> {
     const categories: any[] = [];
     const currentDate: Date = new Date();
