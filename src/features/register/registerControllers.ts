@@ -25,29 +25,37 @@ class RegisterControllers {
         res,
       });
     }
-    const newUser = await prisma.users.create({
-      data: {
-        email: emailAddress,
-        password: hashedPassword,
-        registered_at: currentDate,
-      },
-    });
-    const newUserProfile = await prisma.profiles.create({
-      data: {
-        first_name: firstName,
-        last_name: lastName,
-        user_id: newUser.user_id,
-      },
-    });
-    return response({
-      message: "Successfully created new user.",
-      statusCode: 201,
-      data: {
-        user: newUser,
-        profile: newUserProfile,
-      },
-      res,
-    });
+    try {
+      const newUser = await prisma.users.create({
+        data: {
+          email: emailAddress,
+          password: hashedPassword,
+          registered_at: currentDate,
+        },
+      });
+      const newUserProfile = await prisma.profiles.create({
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          user_id: newUser.user_id,
+        },
+      });
+      return response({
+        message: "Successfully created new user.",
+        statusCode: 201,
+        data: {
+          user: newUser,
+          profile: newUserProfile,
+        },
+        res,
+      });
+    } catch (error: any) {
+      return response({
+        message: error.message,
+        statusCode: 500,
+        res,
+      });
+    }
   }
 }
 

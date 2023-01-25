@@ -44,7 +44,7 @@ model Medias {
 
 model Posts {
   post_id           Int                 @id @default(autoincrement())
-  user              Users               @relation(fields: [user_id], references: [user_id])
+  user              Users?              @relation(fields: [user_id], references: [user_id])
   media             Medias?             @relation(fields: [media_id], references: [media_id])
   user_id           Int
   media_id          Int?                @unique
@@ -55,7 +55,7 @@ model Posts {
   post_content      String              @db.Text
   post_published    Boolean             @default(false)
   post_created      DateTime            @db.Date
-  post_last_updated DateTime
+  post_last_updated DateTime            @default(now())
 }
 
 model Categories {
@@ -67,8 +67,8 @@ model Categories {
 }
 
 model CategoriesOnPosts {
-  posts       Posts      @relation(fields: [post_id], references: [post_id])
-  categories  Categories @relation(fields: [category_id], references: [category_id])
+  posts       Posts?      @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+  categories  Categories? @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
   post_id     Int
   category_id Int
 

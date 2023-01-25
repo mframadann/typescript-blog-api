@@ -9,9 +9,9 @@ export type PostPayloads = {
   postPublished: boolean;
 };
 
-export type PostQueryParams = {
+export type PostQueryParams<T> = {
   user?: boolean;
   media?: boolean;
   categories?: boolean;
-  post_id?: number;
+  post_id?: T;
 };

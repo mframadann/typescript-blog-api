@@ -8,6 +8,7 @@ class PostRouter {
     this.getMethods();
     this.postMethods();
     this.putMethods();
+    this.deleteMethods();
   }
   private getMethods(): void {
     this.router.get("/", PostControllers.getAllPosts);
@@ -18,6 +19,9 @@ class PostRouter {
   }
   private putMethods(): void {
     this.router.put("/update", PostControllers.updatePost);
+  }
+  private deleteMethods(): void {
+    this.router.delete("/delete", PostControllers.deletePosts);
   }
 }
 
