@@ -159,14 +159,81 @@ class PostControllers {
       });
     }
   }
-
   public async updatePost(req: Request, res: Response): Promise<Response> {
-    return response({
-      statusCode: 201,
-      message: "New post successfully created",
-      data: [],
-      res,
+    const categories: any[] = [];
+    const { post_id }: PostQueryParams = req.query;
+    const {
+      postTitle,
+      postContent,
+      categoryIds,
+      postPublished,
+      mediaId,
+    }: PostPayloads = req.body;
+    const postExcerpt: string = postContent.slice(0, 50);
+    const postSlug: string = postTitle.replace(/ /g, "-").toLowerCase();
+    [...categoryIds].map((categoryId): void => {
+      categories.push({
+        category_id: Number(categoryId),
+      });
     });
+    const postIsExist = await prisma.posts.count({
+      where: {
+        post_id: Number(post_id),
+      },
+    });
+    if (!postIsExist) {
+      return response({
+        statusCode: 404,
+        message: `Cannot find post with id ${post_id}, try again`,
+        res,
+      });
+    }
+    if (
+      !postTitle ||
+      !postSlug ||
+      !postContent ||
+      !postExcerpt ||
+      !categoryIds
+    ) {
+      return response({
+        statusCode: 400,
+        message: "Payload cannot be null or undefined. please try again",
+        res,
+      });
+    }
+    try {
+      const updatedPost = await prisma.posts.update({
+        where: {
+          post_id: Number(post_id),
+        },
+        data: {
+          post_title: postTitle,
+          post_slug: postSlug,
+          post_excerpt: postExcerpt,
+          post_content: postContent,
+          post_published: Boolean(postPublished),
+          media_id: mediaId ?? null,
+          categories: {
+            deleteMany: {
+              post_id: Number(post_id),
+            },
+            create: categories,
+          },
+        },
+      });
+      return response({
+        statusCode: 200,
+        message: `Post with id ${post_id} successfully updated.`,
+        data: updatedPost,
+        res,
+      });
+    } catch (error: any) {
+      return response({
+        statusCode: 201,
+        message: error.message,
+        res,
+      });
+    }
   }
 }
 
