@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { response } from "../../helpers";
-import userControllers from "../users/userControllers";
+import { response, Slugger } from "../../helpers";
 import { PostPayloads, PostQueryParams } from "./types/index";
 
 const prisma = new PrismaClient();
@@ -36,8 +35,8 @@ class PostControllers {
       return {
         ...post,
         user: {
-          ...post.user.profile,
-          email: post.user.email,
+          ...post.user?.profile,
+          email: post.user?.email,
         },
         categories: post.categories.map((category) => category.categories),
       };
@@ -49,8 +48,8 @@ class PostControllers {
       res,
     });
   }
-  public async getPostById(req: Request, res: Response): Promise<Response> {
-    const { post_id }: PostQueryParams = req.query;
+  public async getPostById<T>(req: Request, res: Response): Promise<Response> {
+    const { post_id }: PostQueryParams<T> = req.query;
     const getPost = await prisma.posts.findUnique({
       where: {
         post_id: Number(post_id),
@@ -85,8 +84,8 @@ class PostControllers {
     const postData = {
       ...getPost,
       user: {
-        email: getPost?.user.email,
-        ...getPost?.user.profile,
+        email: getPost.user?.email,
+        ...getPost.user?.profile,
       },
       categories: getPost?.categories.map((category) => category.categories),
     };
@@ -108,7 +107,7 @@ class PostControllers {
       mediaId,
     }: PostPayloads = req.body;
     const postExcerpt: string = postContent.slice(0, 50);
-    const postSlug: string = postTitle.replace(/ /g, "-").toLowerCase();
+    const postSlug: string = Slugger({ text: postTitle });
     [...categoryIds].map((categoryId): void => {
       categories.push({
         category_id: Number(categoryId),
@@ -159,9 +158,9 @@ class PostControllers {
       });
     }
   }
-  public async updatePost(req: Request, res: Response): Promise<Response> {
+  public async updatePost<T>(req: Request, res: Response): Promise<Response> {
     const categories: any[] = [];
-    const { post_id }: PostQueryParams = req.query;
+    const { post_id }: PostQueryParams<T> = req.query;
     const {
       postTitle,
       postContent,
@@ -170,7 +169,7 @@ class PostControllers {
       mediaId,
     }: PostPayloads = req.body;
     const postExcerpt: string = postContent.slice(0, 50);
-    const postSlug: string = postTitle.replace(/ /g, "-").toLowerCase();
+    const postSlug: string = Slugger({ text: postTitle });
     [...categoryIds].map((categoryId): void => {
       categories.push({
         category_id: Number(categoryId),
@@ -234,6 +233,19 @@ class PostControllers {
         res,
       });
     }
+  }
+  public async deletePosts<T>(req: Request, res: Response): Promise<Response> {
+    const { post_id }: PostQueryParams<T> = req.query;
+    await prisma.posts.delete({
+      where: {
+        post_id: Number(post_id),
+      },
+    });
+    return response({
+      statusCode: 200,
+      message: `Successfully deleted post with id ${post_id}`,
+      res,
+    });
   }
 }
 
