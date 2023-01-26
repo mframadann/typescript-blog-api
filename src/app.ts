@@ -1,6 +1,7 @@
 import express, { Application } from "express";
-import { Categories, Posts, Register, Users } from "./features";
+import { Categories, Medias, Posts, Register, Users } from "./features";
 import logger from "morgan";
+import path from "path";
 
 class Applications {
   public app: Application;
@@ -16,6 +17,7 @@ class Applications {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(logger("dev"));
+    this.app.use("/tmp", express.static(path.join(__dirname, "/tmp/uploads")));
   }
 
   private routes(): void {
@@ -23,6 +25,7 @@ class Applications {
     this.app.use("/users", Users);
     this.app.use("/posts", Posts);
     this.app.use("/categories", Categories);
+    this.app.use("/medias", Medias);
   }
 }
 
