@@ -14,6 +14,7 @@ class CategoryRouter implements IRouters {
 
   getMethods(): void {
     this.router.get("/", CategoryControllers.getAllCategories);
+    this.router.get("/find", CategoryControllers.getCategoryById);
   }
   postMethods(): void {
     this.router.post("/create", CategoryControllers.createNewCategory);
