@@ -7,7 +7,7 @@
     "dev": "nodemon ./dist/src/main.js",
     "build": "rm -rf dist/ && tsc",
     "watchdev": "rm -rf dist/ && tsc -w",
-    "test": "jest --coverage"
+    "test": "jest -t --coverage"
   },
   "repository": {
     "type": "git",

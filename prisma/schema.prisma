@@ -60,8 +60,8 @@ model Posts {
 
 model Categories {
   category_id   Int                 @id @default(autoincrement())
-  category_name String              @db.VarChar(50)
-  category_slug String              @db.VarChar(50)
+  category_name String              @unique @db.VarChar(50)
+  category_slug String              @unique @db.VarChar(50)
   created_at    DateTime            @db.Date
   posts         CategoriesOnPosts[]
 }

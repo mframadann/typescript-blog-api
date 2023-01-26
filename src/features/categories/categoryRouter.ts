@@ -19,7 +19,9 @@ class CategoryRouter implements IRouters {
   postMethods(): void {
     this.router.post("/create", CategoryControllers.createNewCategory);
   }
-  putMethods(): void {}
+  putMethods(): void {
+    this.router.put("/update", CategoryControllers.updateCategory);
+  }
   deleteMethods(): void {}
 }
 

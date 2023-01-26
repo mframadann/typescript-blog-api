@@ -91,6 +91,52 @@ class CategoryControllers {
       });
     }
   }
+  public async updateCategory(req: Request, res: Response): Promise<Response> {
+    const { categoryName }: CategoryPayloads = req.body;
+    const { category_id }: CategoryParams = req.query;
+    const categorySlug = Slugger({ text: String(categoryName) });
+    const categoryIsExist = await prisma.categories.count({
+      where: {
+        category_id: Number(category_id),
+      },
+    });
+    if (!categoryIsExist) {
+      return response({
+        statusCode: 404,
+        message: `Cannot update category with id ${category_id}, category with id ${category_id} doesn't exist`,
+        res,
+      });
+    }
+    if (!categoryName) {
+      return response({
+        statusCode: 400,
+        message: "Payload cannot be null.",
+        res,
+      });
+    }
+    try {
+      await prisma.categories.update({
+        where: {
+          category_id: Number(category_id),
+        },
+        data: {
+          category_name: categoryName,
+          category_slug: categorySlug,
+        },
+      });
+      return response({
+        statusCode: 200,
+        message: `Successfully update category with id ${category_id}`,
+        res,
+      });
+    } catch (error: any) {
+      return response({
+        statusCode: 500,
+        message: error.message,
+        res,
+      });
+    }
+  }
 }
 
 export default new CategoryControllers();
