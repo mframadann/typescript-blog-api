@@ -22,7 +22,9 @@ class CategoryRouter implements IRouters {
   putMethods(): void {
     this.router.put("/update", CategoryControllers.updateCategory);
   }
-  deleteMethods(): void {}
+  deleteMethods(): void {
+    this.router.delete("/delete", CategoryControllers.deleteCategory);
+  }
 }
 
 export default new CategoryRouter().router;

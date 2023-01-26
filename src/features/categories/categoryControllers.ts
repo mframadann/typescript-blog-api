@@ -137,6 +137,46 @@ class CategoryControllers {
       });
     }
   }
+  public async deleteCategory(req: Request, res: Response): Promise<Response> {
+    const { category_id }: CategoryParams = req.query;
+    if (!Number(category_id)) {
+      return response({
+        statusCode: 400,
+        message: `Please insert a valid type of category_id`,
+        res,
+      });
+    }
+    const categoryIsExist = await prisma.categories.count({
+      where: {
+        category_id: Number(category_id),
+      },
+    });
+    if (!categoryIsExist) {
+      return response({
+        statusCode: 404,
+        message: `Cannot update category with id ${category_id}, category with id ${category_id} doesn't exist`,
+        res,
+      });
+    }
+    try {
+      await prisma.categories.delete({
+        where: {
+          category_id: Number(category_id),
+        },
+      });
+      return response({
+        statusCode: 200,
+        message: `Successfully delete category with id ${category_id}`,
+        res,
+      });
+    } catch (error: any) {
+      return response({
+        statusCode: 500,
+        message: error.message,
+        res,
+      });
+    }
+  }
 }
 
 export default new CategoryControllers();
