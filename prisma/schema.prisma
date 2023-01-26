@@ -32,14 +32,15 @@ model Profiles {
 }
 
 model Medias {
-  media_id       Int       @id @default(autoincrement())
-  post           Posts?
-  profile        Profiles?
-  media_name     String
-  media_path     String
-  media_mimetype String
-  media_url      String
-  media_size     Int
+  media_id            Int       @id @default(autoincrement())
+  post                Posts?
+  profile             Profiles?
+  media_original_name String
+  media_name          String
+  media_path          String
+  media_mimetype      String
+  media_url           String
+  media_size          Int
 }
 
 model Posts {

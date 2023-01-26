@@ -1,5 +1,5 @@
 {
-  "exclude": ["jest.config.js", "./dist", "./coverage", "./test"],
+  "exclude": ["jest.config.js", "./dist", "./coverage", "./__test__"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
