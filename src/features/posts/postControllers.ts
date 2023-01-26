@@ -20,7 +20,7 @@ class PostControllers {
         },
         categories: {
           include: {
-            categories: {
+            category: {
               select: {
                 category_name: true,
                 category_slug: true,
@@ -38,7 +38,7 @@ class PostControllers {
           ...post.user?.profile,
           email: post.user?.email,
         },
-        categories: post.categories.map((category) => category.categories),
+        categories: post.categories.map((category) => category.category),
       };
     });
     return response({
@@ -63,7 +63,7 @@ class PostControllers {
         },
         categories: {
           select: {
-            categories: {
+            category: {
               select: {
                 category_id: true,
                 category_name: true,
@@ -87,7 +87,7 @@ class PostControllers {
         email: getPost.user?.email,
         ...getPost.user?.profile,
       },
-      categories: getPost?.categories.map((category) => category.categories),
+      categories: getPost?.categories.map((category) => category.category),
     };
     return response({
       statusCode: 200,
@@ -223,7 +223,6 @@ class PostControllers {
       return response({
         statusCode: 200,
         message: `Post with id ${post_id} successfully updated.`,
-        data: updatedPost,
         res,
       });
     } catch (error: any) {
@@ -236,16 +235,34 @@ class PostControllers {
   }
   public async deletePosts<T>(req: Request, res: Response): Promise<Response> {
     const { post_id }: PostQueryParams<T> = req.query;
-    await prisma.posts.delete({
-      where: {
-        post_id: Number(post_id),
-      },
+    const postExist = await prisma.posts.count({
+      where: { post_id: Number(post_id) },
     });
-    return response({
-      statusCode: 200,
-      message: `Successfully deleted post with id ${post_id}`,
-      res,
-    });
+    if (!postExist) {
+      return response({
+        statusCode: 404,
+        message: `Cannot delete post with id ${post_id}, post doesn't exist`,
+        res,
+      });
+    }
+    try {
+      await prisma.posts.delete({
+        where: {
+          post_id: Number(post_id),
+        },
+      });
+      return response({
+        statusCode: 200,
+        message: `Successfully deleted post with id ${post_id}`,
+        res,
+      });
+    } catch (error: any) {
+      return response({
+        statusCode: 200,
+        message: error.message,
+        res,
+      });
+    }
   }
 }
 

@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { hash, response } from "../../helpers";
-import { RegisterPayloadType } from "./types";
+import { RegisterPayloads } from "./types";
 
 const prisma = new PrismaClient();
 class RegisterControllers {
   public async createNewUser(req: Request, res: Response): Promise<Response> {
-    const { emailAddress, password, firstName, lastName }: RegisterPayloadType =
+    const { emailAddress, password, firstName, lastName }: RegisterPayloads =
       req.body;
     const whitelistEmailDomain: string[] = ["gmail.com", "twitter.com"];
     const hashedPassword = await hash({ text: password });
@@ -26,26 +26,24 @@ class RegisterControllers {
       });
     }
     try {
-      const newUser = await prisma.users.create({
+      const newUserWithProfile = await prisma.users.create({
         data: {
           email: emailAddress,
           password: hashedPassword,
           registered_at: currentDate,
-        },
-      });
-      const newUserProfile = await prisma.profiles.create({
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-          user_id: newUser.user_id,
+          profile: {
+            create: {
+              first_name: firstName,
+              last_name: lastName,
+            },
+          },
         },
       });
       return response({
         message: "Successfully created new user.",
         statusCode: 201,
         data: {
-          user: newUser,
-          profile: newUserProfile,
+          user: newUserWithProfile,
         },
         res,
       });

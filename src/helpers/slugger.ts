@@ -3,10 +3,11 @@ type SluggerArgs = {
 };
 
 const Slugger = ({ text }: SluggerArgs): string => {
-  const slug = text
+  const slug: string = text
     .toLowerCase()
     .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "-"); // Remove all non-word chars
+    .replace(/[^\w\-]+/g, "")
+    .replace(/ /g, "-"); // Remove all non-word chars
   return slug;
 };
 

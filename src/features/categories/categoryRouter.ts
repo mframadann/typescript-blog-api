@@ -1,0 +1,28 @@
+import { Router } from "express";
+import { IRouters } from "../../interfaces";
+import CategoryControllers from "./categoryControllers";
+
+class CategoryRouter implements IRouters {
+  public router: Router;
+  constructor() {
+    this.router = Router();
+    this.getMethods();
+    this.postMethods();
+    this.putMethods();
+    this.deleteMethods();
+  }
+
+  getMethods(): void {
+    this.router.get("/", CategoryControllers.getAllCategories);
+    this.router.get("/find", CategoryControllers.getCategoryById);
+  }
+  postMethods(): void {
+    this.router.post("/create", CategoryControllers.createNewCategory);
+  }
+  putMethods(): void {
+    this.router.put("/update", CategoryControllers.updateCategory);
+  }
+  deleteMethods(): void {}
+}
+
+export default new CategoryRouter().router;
