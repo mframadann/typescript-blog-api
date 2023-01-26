@@ -74,6 +74,13 @@ class UsersControllers {
           : post,
       },
     });
+    if (!userData) {
+      return response({
+        statusCode: 404,
+        message: `Cannot find user with id ${user_id}, try again`,
+        res,
+      });
+    }
     return response({
       statusCode: 200,
       message: "Successfully get specified users",

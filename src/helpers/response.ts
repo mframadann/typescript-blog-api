@@ -1,22 +1,20 @@
 import { Response } from "express";
-type ResponseParams = {
+type ResponseParams<T> = {
   statusCode: number;
   message?: string;
-  data?: any;
+  data?: T;
   res: Response;
 };
 
-const response = ({
+const response = <T>({
   statusCode,
   message,
   data,
   res,
-}: ResponseParams): Response => {
+}: ResponseParams<T>): Response => {
   return res.status(statusCode).json({
-    responses: {
-      message,
-      data,
-    },
+    message,
+    data,
   });
 };
 

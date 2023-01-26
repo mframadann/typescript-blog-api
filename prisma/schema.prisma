@@ -21,8 +21,8 @@ model Users {
 
 model Profiles {
   profile_id   Int       @id @default(autoincrement())
-  users        Users     @relation(fields: [user_id], references: [user_id])
-  media        Medias?   @relation(fields: [media_id], references: [media_id])
+  user         Users     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  media        Medias?   @relation(fields: [media_id], references: [media_id], onDelete: Cascade)
   user_id      Int       @unique
   media_id     Int?      @unique
   first_name   String?   @db.VarChar(30)
@@ -33,8 +33,8 @@ model Profiles {
 
 model Medias {
   media_id       Int       @id @default(autoincrement())
-  posts          Posts?
-  profiles       Profiles?
+  post           Posts?
+  profile        Profiles?
   media_name     String
   media_path     String
   media_mimetype String
@@ -44,8 +44,8 @@ model Medias {
 
 model Posts {
   post_id           Int                 @id @default(autoincrement())
-  user              Users?              @relation(fields: [user_id], references: [user_id])
-  media             Medias?             @relation(fields: [media_id], references: [media_id])
+  user              Users?              @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  media             Medias?             @relation(fields: [media_id], references: [media_id], onDelete: SetNull)
   user_id           Int
   media_id          Int?                @unique
   categories        CategoriesOnPosts[]
@@ -67,8 +67,8 @@ model Categories {
 }
 
 model CategoriesOnPosts {
-  posts       Posts?      @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
-  categories  Categories? @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
+  post        Posts?      @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+  category    Categories? @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
   post_id     Int
   category_id Int
 

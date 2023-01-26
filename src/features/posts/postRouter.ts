@@ -1,7 +1,8 @@
 import { Router } from "express";
+import { IRouters } from "../../interfaces";
 import PostControllers from "./postControllers";
 
-class PostRouter {
+class PostRouter implements IRouters {
   public router: Router;
   constructor() {
     this.router = Router();
@@ -10,17 +11,17 @@ class PostRouter {
     this.putMethods();
     this.deleteMethods();
   }
-  private getMethods(): void {
+  getMethods(): void {
     this.router.get("/", PostControllers.getAllPosts);
     this.router.get("/find", PostControllers.getPostById);
   }
-  private postMethods(): void {
+  postMethods(): void {
     this.router.post("/create", PostControllers.createNewPosts);
   }
-  private putMethods(): void {
+  putMethods(): void {
     this.router.put("/update", PostControllers.updatePost);
   }
-  private deleteMethods(): void {
+  deleteMethods(): void {
     this.router.delete("/delete", PostControllers.deletePosts);
   }
 }
