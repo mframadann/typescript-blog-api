@@ -21,7 +21,9 @@ class MediaRouter extends Routers {
       MediaControllers.updateMedia
     );
   }
-  deleteMethods(): void {}
+  deleteMethods(): void {
+    this.router.delete("/delete", MediaControllers.deleteMedia);
+  }
 }
 
 export default new MediaRouter().router;

@@ -110,6 +110,11 @@ class MediaControllers {
     }
     if (!Number(media_id)) {
       fs.unlinkSync(String(req.file?.path));
+      return response({
+        statusCode: 400,
+        message: `Please insert a valid id`,
+        res,
+      });
     }
     const mediaIsExist = await prisma.medias.findUnique({
       where: { media_id: Number(media_id) },
@@ -161,6 +166,48 @@ class MediaControllers {
       return response({
         statusCode: 200,
         message: `successfully update media with id ${media_id}`,
+        res,
+      });
+    } catch (error: any) {
+      return response({
+        statusCode: 500,
+        message: error.message,
+        res,
+      });
+    }
+  }
+  public async deleteMedia(req: Request, res: Response): Promise<Response> {
+    const { media_id }: MediaQueryParams = req.query;
+    if (!Number(media_id)) {
+      return response({
+        statusCode: 400,
+        message: `Please insert a valid id`,
+        res,
+      });
+    }
+    const mediaIsExist = await prisma.medias.findUnique({
+      where: { media_id: Number(media_id) },
+      select: {
+        media_path: true,
+      },
+    });
+    if (!mediaIsExist) {
+      return response({
+        statusCode: 404,
+        message: `Cannot get media with id ${media_id}, media doesn't exist.`,
+        res,
+      });
+    }
+    try {
+      await fs.unlinkSync(mediaIsExist.media_path);
+      await prisma.medias.delete({
+        where: {
+          media_id: Number(media_id),
+        },
+      });
+      return response({
+        statusCode: 200,
+        message: `Successfully deleted post with id ${media_id}`,
         res,
       });
     } catch (error: any) {
