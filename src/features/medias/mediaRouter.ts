@@ -14,7 +14,13 @@ class MediaRouter extends Routers {
       MediaControllers.uploadNewMedia
     );
   }
-  putMethods(): void {}
+  putMethods(): void {
+    this.router.put(
+      "/update",
+      upload.single("image"),
+      MediaControllers.updateMedia
+    );
+  }
   deleteMethods(): void {}
 }
 

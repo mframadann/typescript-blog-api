@@ -5,7 +5,7 @@ export type MediaPayloads = {
   mediaMimeType: string | undefined;
   mediaUrl: string;
   mediaSize: string;
-  uploadedAt: Date;
+  uploadedAt?: Date;
 };
 
 export type MediaQueryParams = {
