@@ -1,5 +1,5 @@
-import app from "./app";
+import { App } from "./core";
 
-app.app.listen(app.port, () => {
-  console.log(`Server running at http://localhost:${app.port}`);
+App.app.listen(App.port, () => {
+  console.log(`Server running at http://localhost:${App.port}`);
 });

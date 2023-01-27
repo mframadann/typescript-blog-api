@@ -1,16 +1,7 @@
-import { Router } from "express";
-import { IRouters } from "../../interfaces";
+import { Routers } from "../../core";
 import PostControllers from "./postControllers";
 
-class PostRouter implements IRouters {
-  public router: Router;
-  constructor() {
-    this.router = Router();
-    this.getMethods();
-    this.postMethods();
-    this.putMethods();
-    this.deleteMethods();
-  }
+class PostRouter extends Routers {
   getMethods(): void {
     this.router.get("/", PostControllers.getAllPosts);
     this.router.get("/find", PostControllers.getPostById);

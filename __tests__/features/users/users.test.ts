@@ -1,6 +1,6 @@
 import { describe, expect, it } from "@jest/globals";
 import request from "supertest";
-import app from "../../../src/app";
+import app from "../../../src/core/app";
 
 describe("GET /users endpoint", () => {
   it("should return 200 & all users data", async () => {

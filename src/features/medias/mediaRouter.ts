@@ -1,17 +1,8 @@
-import { Router } from "express";
-import { IRouters } from "../../interfaces";
+import { Routers } from "../../core";
 import { upload } from "../../utils";
 import MediaControllers from "./mediaControllers";
 
-class MediaRouter implements IRouters {
-  public router: Router;
-  constructor() {
-    this.router = Router();
-    this.getMethods();
-    this.postMethods();
-    this.putMethods();
-    this.deleteMethods();
-  }
+class MediaRouter extends Routers {
   getMethods(): void {}
   postMethods(): void {
     this.router.post(

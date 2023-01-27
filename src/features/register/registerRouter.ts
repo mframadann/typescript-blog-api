@@ -1,13 +1,7 @@
-import { Router } from "express";
-import { IRouters } from "../../interfaces";
+import { Routers } from "../../core";
 import RegisterController from "./registerControllers";
 
-class RegisterRouter implements IRouters {
-  public router: Router;
-  constructor() {
-    this.router = Router();
-    this.postMethods();
-  }
+class RegisterRouter extends Routers {
   getMethods(): void {}
   putMethods(): void {}
   deleteMethods(): void {}

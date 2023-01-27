@@ -1,7 +1,8 @@
 import express, { Application } from "express";
-import { Categories, Medias, Posts, Register, Users } from "./features";
+import { Categories, Medias, Posts, Register, Users } from "../features";
 import logger from "morgan";
 import path from "path";
+import compression from "compression";
 
 class Applications {
   public app: Application;
@@ -14,6 +15,7 @@ class Applications {
   }
 
   private middlewares() {
+    this.app.use(compression());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(logger("dev"));
