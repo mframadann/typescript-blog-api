@@ -1,6 +1,6 @@
 import { describe, expect, test, it } from "@jest/globals";
 import request from "supertest";
-import app from "../../../src/app";
+import app from "../../../src/core/app";
 
 describe("GET /categories endpoint", () => {
   it("should return 200 & all categories data", async () => {

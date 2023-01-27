@@ -40,7 +40,8 @@ model Medias {
   media_path          String
   media_mimetype      String
   media_url           String
-  media_size          Int
+  media_size          String
+  uploaded_at         DateTime
 }
 
 model Posts {
