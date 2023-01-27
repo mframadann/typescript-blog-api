@@ -4,3 +4,5 @@ node_modules
 dist
 node_modules
 coverage
+__tests__
+jest.config.ts
