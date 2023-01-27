@@ -7,3 +7,7 @@ export type MediaPayloads = {
   mediaSize: string;
   uploadedAt: Date;
 };
+
+export type MediaQueryParams = {
+  media_id?: number | unknown;
+};

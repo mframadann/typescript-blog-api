@@ -3,7 +3,10 @@ import { upload } from "../../utils";
 import MediaControllers from "./mediaControllers";
 
 class MediaRouter extends Routers {
-  getMethods(): void {}
+  getMethods(): void {
+    this.router.get("/", MediaControllers.getAllMedias);
+    this.router.get("/find", MediaControllers.getMediaById);
+  }
   postMethods(): void {
     this.router.post(
       "/upload",
