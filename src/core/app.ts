@@ -19,7 +19,10 @@ class Applications {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(logger("dev"));
-    this.app.use("/tmp", express.static(path.join(__dirname, "/tmp/uploads")));
+    this.app.use(
+      "/tmp",
+      express.static(path.join(__dirname, "../tmp/uploads"))
+    );
   }
 
   private routes(): void {
