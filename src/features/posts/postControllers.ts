@@ -31,14 +31,14 @@ class PostControllers {
         media: true,
       },
     });
-    const resultSets = allPosts.map((post): {} => {
+    const resultSets = allPosts.map((post: any): {} => {
       return {
         ...post,
         user: {
           ...post.user?.profile,
           email: post.user?.email,
         },
-        categories: post.categories.map((category) => category.category),
+        categories: post.categories.map((category: any) => category.category),
       };
     });
     return response({
@@ -87,7 +87,7 @@ class PostControllers {
         email: getPost.user?.email,
         ...getPost.user?.profile,
       },
-      categories: getPost?.categories.map((category) => category.category),
+      categories: getPost?.categories.map((category: any) => category.category),
     };
     return response({
       statusCode: 200,
