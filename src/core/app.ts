@@ -1,5 +1,12 @@
 import express, { Application } from "express";
-import { Categories, Medias, Posts, Register, Users } from "../features";
+import {
+  Authentications,
+  Categories,
+  Medias,
+  Posts,
+  Register,
+  Users,
+} from "../features";
 import logger from "morgan";
 import path from "path";
 import compression from "compression";
@@ -31,6 +38,7 @@ class Applications {
     this.app.use("/posts", Posts);
     this.app.use("/categories", Categories);
     this.app.use("/medias", Medias);
+    this.app.use("/auths", Authentications);
   }
 }
 
