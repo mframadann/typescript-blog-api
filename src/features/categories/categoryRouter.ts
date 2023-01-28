@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { IRouters } from "../../interfaces";
+import { Authorization } from "../../utils";
 import CategoryControllers from "./categoryControllers";
 
 class CategoryRouter implements IRouters {
@@ -13,10 +14,12 @@ class CategoryRouter implements IRouters {
   }
 
   getMethods(): void {
+    this.router.use(Authorization);
     this.router.get("/", CategoryControllers.getAllCategories);
     this.router.get("/find", CategoryControllers.getCategoryById);
   }
   postMethods(): void {
+    this.router.use(Authorization);
     this.router.post("/create", CategoryControllers.createNewCategory);
   }
   putMethods(): void {
