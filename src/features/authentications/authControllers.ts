@@ -4,13 +4,11 @@ import { PrismaClient } from "@prisma/client";
 import { LoginPayloads } from "./types";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { type } from "os";
 
 const prisma = new PrismaClient();
 class AuthControllers {
   public async login(req: Request, res: Response): Promise<Response> {
     const { emailAddress, password }: LoginPayloads = req.body;
-    const { REFRESH_TOKEN_SECRET_KEY, SECRET_KEY } = process.env;
     const user = await prisma.users.findFirst({
       where: {
         email: emailAddress,
@@ -40,7 +38,7 @@ class AuthControllers {
         identifier: user?.user_id,
         email: user?.email,
       },
-      options: { expiresIn: "15s" },
+      options: { expiresIn: "10m" },
     });
     const refreshToken = createToken({
       payload: {
@@ -48,7 +46,7 @@ class AuthControllers {
         email: user?.email,
       },
       type: "refresh",
-      options: { expiresIn: "10m" },
+      options: { expiresIn: "1h" },
     });
     return response({
       statusCode: 201,
@@ -64,7 +62,6 @@ class AuthControllers {
     res: Response
   ): Promise<string | Response> {
     const refreshToken = req.headers["authorization"]?.split(" ")[1];
-    // let token: string | unknown = null;
     if (!refreshToken) {
       return response({ statusCode: 401, message: "Unauthorized", res });
     }
@@ -79,17 +76,18 @@ class AuthControllers {
         const newToken = createToken({
           payload: user,
           type: "ACCESS_TOKEN",
-          options: { expiresIn: "1m" },
+          options: { expiresIn: "10m" },
         });
         req.body.token = newToken;
       }
     );
     return response({
       statusCode: 201,
-      data: req.body.token,
+      data: {
+        accessToken: req.body.token,
+      },
       res,
     });
   }
 }
-
 export default new AuthControllers();
