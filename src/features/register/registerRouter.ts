@@ -1,7 +1,7 @@
-import { Routers } from "../../core";
+import { AuthRouters } from "../../core";
 import RegisterController from "./registerControllers";
 
-class RegisterRouter extends Routers {
+class RegisterRouter extends AuthRouters {
   getMethods(): void {}
   putMethods(): void {}
   deleteMethods(): void {}

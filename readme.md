@@ -13,4 +13,3 @@ $ npm run dev
 ```
 ## APIs endpoint
 [Click here](https://bold-flare-599284.postman.co/workspace/My-Projects~5e8b985e-7489-411f-a4c9-a47b08fff613/collection/19180075-37171c47-5381-4271-aee3-d3ce4dc23429?action=share&creator=19180075) for view a list api endpoints.
-
